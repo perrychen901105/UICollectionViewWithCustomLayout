@@ -27,6 +27,7 @@
    itemInsetsForSectionAtIndex:(NSInteger)section;
 @end
 
+
 @interface StackedGridLayout : UICollectionViewFlowLayout
-@property (nonatomic, assign) CGFloat headerHeight;
+@property (nonatomic, assign) CGFloat headerHeight;     //每个分区表头是多大.
 @end

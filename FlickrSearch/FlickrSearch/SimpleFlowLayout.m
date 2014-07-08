@@ -38,6 +38,7 @@
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
 {
+    // 加入动画
     if ([_insertedIndexPaths containsObject:itemIndexPath]) {
         // 返回cell属性
         UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:itemIndexPath];

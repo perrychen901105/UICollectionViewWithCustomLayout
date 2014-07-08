@@ -58,12 +58,39 @@
              forIndex:(NSUInteger)index
 {
     // 1
-    __block CGFloat shortestColumnHeight = CGFLOAT_MAX;
+    __block CGFloat shortestColumnHeight = CGFLOAT_MAX;     // 最短列高
+    __block NSUInteger shortestColumnIndex = 0;             // 最短列高的索引
+    
+    // 2        计算最短列及它的索引
+    [_columnHeights enumerateObjectsUsingBlock:^(NSNumber *height, NSUInteger idx, BOOL *stop) {
+        CGFloat thisColumnHeight = [height floatValue];
+        if (thisColumnHeight < shortestColumnHeight) {
+            shortestColumnHeight = thisColumnHeight;
+            shortestColumnIndex = idx;
+        }
+    }];
+    
+    // 3        计算item的frame 列的大小，cell的Insets 和 item大小
+    CGRect frame;
+    frame.origin.x = _frame.origin.x + (_columnWidth * shortestColumnIndex) + _itemInsets.left;
+    frame.origin.y = _frame.origin.y + shortestColumnHeight + _itemInsets.top;
+    frame.size = size;
+    
+    // 4
+    _indexToFrameMap[@(index)] = [NSValue valueWithCGRect:frame];
+    
+    // 5        当该item的frame的y值比分区frame的y值大，更新分区的frame
+    if (CGRectGetMaxY(frame) > CGRectGetMaxY(_frame)) {
+        _frame.size.height = (CGRectGetMaxY(frame) - _frame.origin.y) + _itemInsets.bottom;
+    }
+    
+    // 6        更新列高数组。
+    [_columnHeights replaceObjectAtIndex:shortestColumnIndex withObject:@(shortestColumnHeight + size.height + _itemInsets.bottom)];
 }
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index
 {
-
+    return [_indexToFrameMap[@(index)] CGRectValue];
 }
 
 @end

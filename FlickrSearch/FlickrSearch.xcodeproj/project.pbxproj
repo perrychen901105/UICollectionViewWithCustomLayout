@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		C242B257196BC8A300F6273C /* SimpleFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = C242B256196BC8A300F6273C /* SimpleFlowLayout.m */; };
 		C242B25A196BD44200F6273C /* PinchLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = C242B259196BD44200F6273C /* PinchLayout.m */; };
+		C2D01460196BF5AB0037E903 /* StackedGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D0145F196BF5AB0037E903 /* StackedGridLayout.m */; };
+		C2D01463196BF8BA0037E903 /* StackedGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D01462196BF8BA0037E903 /* StackedGridLayoutSection.m */; };
 		C91C87C715E2BB9100BEA7BA /* FlickrPhotoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C91C87C615E2BB9000BEA7BA /* FlickrPhotoHeaderView.xib */; };
 		C91C87D715E2BE4800BEA7BA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91C87D615E2BE4800BEA7BA /* QuartzCore.framework */; };
 		DD8D019415BE5D9200E62C80 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8D019315BE5D9200E62C80 /* UIKit.framework */; };
@@ -53,6 +55,10 @@
 		C242B256196BC8A300F6273C /* SimpleFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleFlowLayout.m; sourceTree = "<group>"; };
 		C242B258196BD44200F6273C /* PinchLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinchLayout.h; sourceTree = "<group>"; };
 		C242B259196BD44200F6273C /* PinchLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinchLayout.m; sourceTree = "<group>"; };
+		C2D0145E196BF5AB0037E903 /* StackedGridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedGridLayout.h; sourceTree = "<group>"; };
+		C2D0145F196BF5AB0037E903 /* StackedGridLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedGridLayout.m; sourceTree = "<group>"; };
+		C2D01461196BF8B90037E903 /* StackedGridLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackedGridLayoutSection.h; sourceTree = "<group>"; };
+		C2D01462196BF8BA0037E903 /* StackedGridLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackedGridLayoutSection.m; sourceTree = "<group>"; };
 		C91C87C615E2BB9000BEA7BA /* FlickrPhotoHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FlickrPhotoHeaderView.xib; sourceTree = "<group>"; };
 		C91C87D615E2BE4800BEA7BA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DD8D018F15BE5D9200E62C80 /* FlickrSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +131,8 @@
 				C242B256196BC8A300F6273C /* SimpleFlowLayout.m */,
 				C242B258196BD44200F6273C /* PinchLayout.h */,
 				C242B259196BD44200F6273C /* PinchLayout.m */,
+				C2D0145E196BF5AB0037E903 /* StackedGridLayout.h */,
+				C2D0145F196BF5AB0037E903 /* StackedGridLayout.m */,
 			);
 			name = Layout;
 			sourceTree = "<group>";
@@ -178,6 +186,8 @@
 				C91C87C615E2BB9000BEA7BA /* FlickrPhotoHeaderView.xib */,
 				DD9E2EF115BF9D8800455168 /* FlickrPhotoViewController.h */,
 				DD9E2EF215BF9D8800455168 /* FlickrPhotoViewController.m */,
+				C2D01461196BF8B90037E903 /* StackedGridLayoutSection.h */,
+				C2D01462196BF8BA0037E903 /* StackedGridLayoutSection.m */,
 			);
 			path = FlickrSearch;
 			sourceTree = "<group>";
@@ -321,9 +331,11 @@
 				C242B25A196BD44200F6273C /* PinchLayout.m in Sources */,
 				C242B257196BC8A300F6273C /* SimpleFlowLayout.m in Sources */,
 				DD8D01AA15BE5D9200E62C80 /* ViewController.m in Sources */,
+				C2D01463196BF8BA0037E903 /* StackedGridLayoutSection.m in Sources */,
 				DD8D01DE15BE735700E62C80 /* Flickr.m in Sources */,
 				DD8D01DF15BE735700E62C80 /* FlickrPhoto.m in Sources */,
 				DDC689E115BE9A0400C36596 /* FlickrPhotoCell.m in Sources */,
+				C2D01460196BF5AB0037E903 /* StackedGridLayout.m in Sources */,
 				DDC68A0515BECC7B00C36596 /* FlickrPhotoHeaderView.m in Sources */,
 				DD9E2EF315BF9D8800455168 /* FlickrPhotoViewController.m in Sources */,
 			);
@@ -403,10 +415,12 @@
 		DD8D01AE15BE5D9200E62C80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Suzhou Pindao Network Technology Co., Ltd";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FlickrSearch/FlickrSearch-Prefix.pch";
 				INFOPLIST_FILE = "FlickrSearch/FlickrSearch-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "AE206994-2F5C-46C2-AB85-CCBAB058391A";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -414,10 +428,12 @@
 		DD8D01AF15BE5D9200E62C80 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Suzhou Pindao Network Technology Co., Ltd";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FlickrSearch/FlickrSearch-Prefix.pch";
 				INFOPLIST_FILE = "FlickrSearch/FlickrSearch-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "AE206994-2F5C-46C2-AB85-CCBAB058391A";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

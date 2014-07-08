@@ -83,9 +83,39 @@ static const CGFloat kMaxScale = 3.0f;
                                                                                     action:@selector(handleLongPressGesture:)];
 
     self.pinchOutGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self
-                                                                               action:@selector(handlePinchOutGesture)];
+                                                                               action:@selector(handlePinchOutGesture:)];
     
 
+}
+
+- (void)handlePinchInGesture:(UIPinchGestureRecognizer*)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        // 1
+        self.collectionView.alpha = 0.0f;
+    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
+        // 2
+        CGFloat theScale = 1.0f / recognizer.scale;
+        theScale = MIN(theScale, kMaxScale);
+        theScale = MAX(theScale, kMinScale);
+        
+        CGFloat theScalePct = 1.0f - ((theScale - kMinScale) / (kMaxScale - kMinScale));
+        
+        // 3
+        PinchLayout *layout = (PinchLayout*)self.currentPinchCollectionView.collectionViewLayout;
+        layout.pinchScale = theScalePct;
+        layout.pinchCenter = [recognizer locationInView:self.collectionView];
+        
+        // 4
+        self.collectionView.alpha = 1.0f - theScalePct;
+    } else {
+        // 5
+        self.collectionView.alpha = 1.0f;
+        
+        [self.currentPinchCollectionView removeFromSuperview];
+        self.currentPinchCollectionView = nil;
+        self.currentPinchedItem = nil;
+    }
 }
 
 - (void)handlePinchOutGesture:(UIPinchGestureRecognizer*)recognizer
@@ -274,6 +304,9 @@ static const CGFloat kMaxScale = 3.0f;
             NSString *searchTerm = self.searches[section];
             return [self.searchResults[searchTerm] count];
         }
+    } else if (cv == self.currentPinchCollectionView) {
+        NSString *searchTerm = self.searches[self.currentPinchedItem.item];
+        return [self.searchResults[searchTerm] count];
     }
     return 0;
 }
@@ -285,6 +318,8 @@ static const CGFloat kMaxScale = 3.0f;
         } else {
             return [self.searches count];
         }
+    } else if (cv == self.currentPinchCollectionView) {
+        return 1;
     }
     return 0;
 }
@@ -302,6 +337,9 @@ static const CGFloat kMaxScale = 3.0f;
             photo = self.searchResults[searchTerm][indexPath.item];
         }
 
+    } else if (cv == self.currentPinchCollectionView) {
+        NSString *searchTerm = self.searches[self.currentPinchedItem.item];
+        photo = self.searchResults[searchTerm][indexPath.item];
     }
     cell.photo = photo;
     
@@ -313,6 +351,8 @@ static const CGFloat kMaxScale = 3.0f;
     NSString *searchTerm = nil;
     if (cv == self.collectionView) {
         searchTerm = self.searches[indexPath.section];
+    } else if (cv == self.currentPinchCollectionView) {
+        searchTerm = self.searches[self.currentPinchedItem.item];
     }
     [headerView setSearchText:searchTerm];
     return headerView;
@@ -337,6 +377,9 @@ static const CGFloat kMaxScale = 3.0f;
                 photo = self.searchResults[searchTerm][indexPath.item];
             }
 
+        } else if (cv == self.currentPinchCollectionView) {
+            NSString *searchTerm = self.searches[self.currentPinchedItem.item];
+            photo = self.searchResults[searchTerm][indexPath.item];
         }
 		[self performSegueWithIdentifier:@"ShowFlickrPhoto" sender:photo];
 		[self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
@@ -364,6 +407,9 @@ static const CGFloat kMaxScale = 3.0f;
             NSString *searchTerm = self.searches[indexPath.section];
             photo = self.searchResults[searchTerm][indexPath.item];
         }
+    } else if (cv == self.currentPinchCollectionView) {
+        NSString *searchTerm = self.searches[self.currentPinchedItem.item];
+        photo = self.searchResults[searchTerm][indexPath.item];
     }
     
     CGSize retval = photo.thumbnail.size.width > 0.0f ? photo.thumbnail.size : CGSizeMake(100.0f, 100.0f);

@@ -15,6 +15,8 @@
 #import "FlickrPhotoHeaderView.h"
 #import "FlickrPhotoViewController.h"
 
+#import "SimpleFlowLayout.h"
+
 #import <MessageUI/MessageUI.h>
 
 @interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, MFMailComposeViewControllerDelegate>
@@ -32,7 +34,11 @@
 @property (nonatomic) BOOL sharing;
 @property (nonatomic, strong) NSMutableArray *selectedPhotos;
 
+@property (nonatomic, strong) SimpleFlowLayout *layout2;
+
 @property (nonatomic, strong) UICollectionViewFlowLayout *layout1;
+
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 @end
 
@@ -61,6 +67,29 @@
     self.layout1 = [[UICollectionViewFlowLayout alloc] init];
     self.layout1.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.layout1.headerReferenceSize = CGSizeMake(0.0f, 90.0f);
+    
+    self.layout2 = [[SimpleFlowLayout alloc] init];
+    self.layout2.scrollDirection = UICollectionViewScrollDirectionVertical;
+    
+    self.longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(handleLongPressGesture:)];
+}
+
+- (void)handleLongPressGesture:(UILongPressGestureRecognizer*)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateRecognized) {
+        CGPoint tapPoint = [recognizer locationInView:self.collectionView];
+        // 根据按的位置获取item
+        NSIndexPath *item = [self.collectionView indexPathForItemAtPoint:tapPoint];
+        if (item) {
+            NSString *searchTerm = self.searches[item.item];
+            [self.searches removeObjectAtIndex:item.item];
+            [self.searchResults removeObjectForKey:searchTerm];
+            
+            [self.collectionView performBatchUpdates:^{
+                [self.collectionView deleteItemsAtIndexPaths:@[item]];
+            } completion:nil];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -100,9 +129,12 @@
         case 0:
         default: {
             self.collectionView.collectionViewLayout = self.layout1;
+            [self.collectionView removeGestureRecognizer:self.longPressGestureRecognizer];
         }
             break;
         case 1: {
+            self.collectionView.collectionViewLayout = self.layout2;
+            [self.collectionView addGestureRecognizer:self.longPressGestureRecognizer];
         }
             break;
         case 2: {
@@ -129,13 +161,19 @@
 			}
 			dispatch_async(dispatch_get_main_queue(), ^{
                 // RUN AFTER SEARCH HAS FINISHED
-                [self.collectionView performBatchUpdates:^{
-                    NSInteger newSection = (self.searches.count - 1);
-                    for (NSInteger i = 0; i < [results count]; i++) {
-                        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:i inSection:newSection]]];
-                    }
-                    [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:newSection]];
-                } completion:nil];
+                if (self.collectionView.collectionViewLayout == self.layout2) {
+                    [self.collectionView performBatchUpdates:^{
+                        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.searches.count-1 inSection:0]]];
+                    } completion:nil];
+                } else {
+                    [self.collectionView performBatchUpdates:^{
+                        NSInteger newSection = (self.searches.count - 1);
+                        for (NSInteger i = 0; i < [results count]; i++) {
+                            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:i inSection:newSection]]];
+                        }
+                        [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:newSection]];
+                    } completion:nil];
+                }
 			});
 		} else {
 			NSLog(@"Error searching Flickr: %@", error.localizedDescription);
@@ -151,15 +189,23 @@
 
 - (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section {
     if (cv == self.collectionView) {
-        NSString *searchTerm = self.searches[section];
-        return [self.searchResults[searchTerm] count];
+        if (cv.collectionViewLayout == self.layout2) {
+            return [self.searches count];
+        } else {
+            NSString *searchTerm = self.searches[section];
+            return [self.searchResults[searchTerm] count];
+        }
     }
     return 0;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
     if (cv == self.collectionView) {
-        return [self.searches count];
+        if (cv.collectionViewLayout == self.layout2) {
+            return 1;
+        } else {
+            return [self.searches count];
+        }
     }
     return 0;
 }
@@ -169,8 +215,14 @@
     
     FlickrPhoto *photo = nil;
     if (cv == self.collectionView) {
-        NSString *searchTerm = self.searches[indexPath.section];
-        photo = self.searchResults[searchTerm][indexPath.item];
+        if (cv.collectionViewLayout == self.layout2) {
+            NSString *searchTerm = self.searches[indexPath.item];
+            photo = self.searchResults[searchTerm][0];
+        } else {
+            NSString *searchTerm = self.searches[indexPath.section];
+            photo = self.searchResults[searchTerm][indexPath.item];
+        }
+
     }
     cell.photo = photo;
     
@@ -198,8 +250,14 @@
 	} else {
         FlickrPhoto *photo = nil;
         if (cv == self.collectionView) {
-            NSString *searchTerm = self.searches[indexPath.section];
-            photo = self.searchResults[searchTerm][indexPath.item];
+            if (cv.collectionViewLayout == self.layout2) {
+                NSString *searchTerm = self.searches[indexPath.item];
+                photo = self.searchResults[searchTerm][0];
+            } else {
+                NSString *searchTerm = self.searches[indexPath.section];
+                photo = self.searchResults[searchTerm][indexPath.item];
+            }
+
         }
 		[self performSegueWithIdentifier:@"ShowFlickrPhoto" sender:photo];
 		[self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
@@ -220,8 +278,13 @@
 - (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout*)cvl sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     FlickrPhoto *photo = nil;
     if (cv == self.collectionView) {
-        NSString *searchTerm = self.searches[indexPath.section];
-        photo = self.searchResults[searchTerm][indexPath.item];
+        if (cvl == self.layout2) {
+            NSString *searchTerm = self.searches[indexPath.item];
+            photo = self.searchResults[searchTerm][0];
+        } else {
+            NSString *searchTerm = self.searches[indexPath.section];
+            photo = self.searchResults[searchTerm][indexPath.item];
+        }
     }
     
     CGSize retval = photo.thumbnail.size.width > 0.0f ? photo.thumbnail.size : CGSizeMake(100.0f, 100.0f);

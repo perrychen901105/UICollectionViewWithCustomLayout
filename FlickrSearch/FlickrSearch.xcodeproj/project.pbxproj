@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C242B257196BC8A300F6273C /* SimpleFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = C242B256196BC8A300F6273C /* SimpleFlowLayout.m */; };
+		C242B25A196BD44200F6273C /* PinchLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = C242B259196BD44200F6273C /* PinchLayout.m */; };
 		C91C87C715E2BB9100BEA7BA /* FlickrPhotoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C91C87C615E2BB9000BEA7BA /* FlickrPhotoHeaderView.xib */; };
 		C91C87D715E2BE4800BEA7BA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91C87D615E2BE4800BEA7BA /* QuartzCore.framework */; };
 		DD8D019415BE5D9200E62C80 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8D019315BE5D9200E62C80 /* UIKit.framework */; };
@@ -47,6 +49,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C242B255196BC8A300F6273C /* SimpleFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFlowLayout.h; sourceTree = "<group>"; };
+		C242B256196BC8A300F6273C /* SimpleFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleFlowLayout.m; sourceTree = "<group>"; };
+		C242B258196BD44200F6273C /* PinchLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinchLayout.h; sourceTree = "<group>"; };
+		C242B259196BD44200F6273C /* PinchLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinchLayout.m; sourceTree = "<group>"; };
 		C91C87C615E2BB9000BEA7BA /* FlickrPhotoHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FlickrPhotoHeaderView.xib; sourceTree = "<group>"; };
 		C91C87D615E2BE4800BEA7BA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DD8D018F15BE5D9200E62C80 /* FlickrSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlickrSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +121,10 @@
 		C91C87C915E2BE2800BEA7BA /* Layout */ = {
 			isa = PBXGroup;
 			children = (
+				C242B255196BC8A300F6273C /* SimpleFlowLayout.h */,
+				C242B256196BC8A300F6273C /* SimpleFlowLayout.m */,
+				C242B258196BD44200F6273C /* PinchLayout.h */,
+				C242B259196BD44200F6273C /* PinchLayout.m */,
 			);
 			name = Layout;
 			sourceTree = "<group>";
@@ -308,6 +318,8 @@
 			files = (
 				DD8D01A015BE5D9200E62C80 /* main.m in Sources */,
 				DD8D01A415BE5D9200E62C80 /* AppDelegate.m in Sources */,
+				C242B25A196BD44200F6273C /* PinchLayout.m in Sources */,
+				C242B257196BC8A300F6273C /* SimpleFlowLayout.m in Sources */,
 				DD8D01AA15BE5D9200E62C80 /* ViewController.m in Sources */,
 				DD8D01DE15BE735700E62C80 /* Flickr.m in Sources */,
 				DD8D01DF15BE735700E62C80 /* FlickrPhoto.m in Sources */,

@@ -9,14 +9,14 @@
 #import "Flickr.h"
 #import "FlickrPhoto.h"
 
-#define kFlickrAPIKey @"978d7216fb7560fbd505ddc25c7bc264"
+#define kFlickrAPIKey @"c4ae9fd280b17a83328888e52957191f"
 
 @implementation Flickr
 
 + (NSString *)flickrSearchURLForSearchTerm:(NSString *) searchTerm
 {
     searchTerm = [searchTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    return [NSString stringWithFormat:@"http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=%@&text=%@&per_page=20&format=json&nojsoncallback=1",kFlickrAPIKey,searchTerm];
+    return [NSString stringWithFormat:@"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=%@&text=%@&per_page=20&format=json&nojsoncallback=1",kFlickrAPIKey,searchTerm];
 }
 
 + (NSString *)flickrPhotoURLForFlickrPhoto:(FlickrPhoto *) flickrPhoto size:(NSString *) size
@@ -25,7 +25,7 @@
     {
         size = @"m";
     }
-    return [NSString stringWithFormat:@"http://farm%d.staticflickr.com/%d/%lld_%@_%@.jpg",flickrPhoto.farm,flickrPhoto.server,flickrPhoto.photoID,flickrPhoto.secret,size];
+    return [NSString stringWithFormat:@"https://farm%d.staticflickr.com/%d/%lld_%@_%@.jpg",flickrPhoto.farm,flickrPhoto.server,flickrPhoto.photoID,flickrPhoto.secret,size];
 }
 
 - (void)searchFlickrForTerm:(NSString *) term completionBlock:(FlickrSearchCompletionBlock) completionBlock

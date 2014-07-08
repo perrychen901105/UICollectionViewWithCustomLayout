@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+    <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="4">
+            <objects>
+                <viewController id="2" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GvO-TH-ejD"/>
+                        <viewControllerLayoutGuide type="bottom" id="HD6-4F-l4L"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5">
+                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6vY-dc-VoR">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                                <items>
+                                    <barButtonItem title="Share" id="LSn-Jt-CVL">
+                                        <connections>
+                                            <action selector="shareButtonTapped:" destination="2" id="pQI-Ep-XjS"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="VoS-eM-rqm"/>
+                                    <barButtonItem style="plain" id="wwm-rG-ItR">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Okt-PY-Ons">
+                                            <rect key="frame" x="561" y="7" width="200" height="31"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="1"/>
+                                                <segment title="2"/>
+                                                <segment title="3"/>
+                                                <segment title="4"/>
+                                            </segments>
+                                            <connections>
+                                                <action selector="layoutSelectionTapped:" destination="2" eventType="valueChanged" id="wbp-jL-tyR"/>
+                                            </connections>
+                                        </segmentedControl>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kDP-GG-CYe">
+                                <rect key="frame" x="36" y="62" width="697" height="30"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" image="search_text.png" translatesAutoresizingMaskIntoConstraints="NO" id="zDb-79-Dbs">
+                                        <rect key="frame" x="182" y="3" width="97" height="25"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1nt-RI-PuR">
+                                        <rect key="frame" x="287" y="0.0" width="228" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="228" id="GWe-nK-pCi"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="2" id="DIZ-4g-SOP"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="1nt-RI-PuR" firstAttribute="leading" secondItem="zDb-79-Dbs" secondAttribute="trailing" constant="8" symbolic="YES" id="10Z-pp-mef"/>
+                                    <constraint firstItem="zDb-79-Dbs" firstAttribute="leading" secondItem="kDP-GG-CYe" secondAttribute="leading" constant="182" id="Irz-oN-7gI"/>
+                                    <constraint firstItem="1nt-RI-PuR" firstAttribute="centerY" secondItem="zDb-79-Dbs" secondAttribute="centerY" id="Nod-uz-dGW"/>
+                                    <constraint firstItem="1nt-RI-PuR" firstAttribute="bottom" secondItem="kDP-GG-CYe" secondAttribute="bottom" id="gQu-fm-ByZ"/>
+                                    <constraint firstItem="1nt-RI-PuR" firstAttribute="top" secondItem="kDP-GG-CYe" secondAttribute="top" id="om0-BW-dSr"/>
+                                </constraints>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="divider_bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="g5d-2Z-g2l">
+                                <rect key="frame" x="36" y="100" width="697" height="13"/>
+                            </imageView>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UpQ-KD-Ens">
+                                <rect key="frame" x="0.0" y="121" width="768" height="883"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="p0e-pi-GPO">
+                                        <rect key="frame" x="0.0" y="0.0" width="768" height="883"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gux-v8-dha">
+                                            <size key="itemSize" width="86" height="84"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="2" id="3p1-NJ-TGb"/>
+                                            <outlet property="delegate" destination="2" id="DLw-Bl-d9i"/>
+                                        </connections>
+                                    </collectionView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="p0e-pi-GPO" firstAttribute="leading" secondItem="UpQ-KD-Ens" secondAttribute="leading" id="4cC-5d-Czi"/>
+                                    <constraint firstItem="p0e-pi-GPO" firstAttribute="bottom" secondItem="UpQ-KD-Ens" secondAttribute="bottom" id="EsS-cU-UOk"/>
+                                    <constraint firstItem="p0e-pi-GPO" firstAttribute="trailing" secondItem="UpQ-KD-Ens" secondAttribute="trailing" id="d8p-gw-szv"/>
+                                    <constraint firstItem="p0e-pi-GPO" firstAttribute="top" secondItem="UpQ-KD-Ens" secondAttribute="top" id="f6r-yK-31l"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="UpQ-KD-Ens" firstAttribute="leading" secondItem="5" secondAttribute="leading" id="C0O-90-CGL"/>
+                            <constraint firstItem="6vY-dc-VoR" firstAttribute="top" secondItem="5" secondAttribute="top" id="GTJ-IN-Ova"/>
+                            <constraint firstItem="kDP-GG-CYe" firstAttribute="top" secondItem="5" secondAttribute="top" constant="62" id="NS4-QO-PnE"/>
+                            <constraint firstItem="UpQ-KD-Ens" firstAttribute="bottom" secondItem="5" secondAttribute="bottom" id="WbI-Q1-LKF"/>
+                            <constraint firstItem="UpQ-KD-Ens" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" id="a5K-mJ-0lh"/>
+                            <constraint firstItem="g5d-2Z-g2l" firstAttribute="top" secondItem="kDP-GG-CYe" secondAttribute="bottom" constant="8" symbolic="YES" id="c2K-NJ-lpR"/>
+                            <constraint firstItem="6vY-dc-VoR" firstAttribute="leading" secondItem="5" secondAttribute="leading" id="f1Q-2C-vVn"/>
+                            <constraint firstItem="g5d-2Z-g2l" firstAttribute="top" secondItem="5" secondAttribute="top" constant="100" id="gRT-kN-tEt"/>
+                            <constraint firstItem="6vY-dc-VoR" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" id="nsf-ns-Jmj"/>
+                            <constraint firstItem="kDP-GG-CYe" firstAttribute="centerX" secondItem="6vY-dc-VoR" secondAttribute="centerX" id="snp-E2-ELg"/>
+                            <constraint firstItem="kDP-GG-CYe" firstAttribute="leading" secondItem="g5d-2Z-g2l" secondAttribute="leading" id="tmg-UD-EQh"/>
+                            <constraint firstItem="kDP-GG-CYe" firstAttribute="trailing" secondItem="g5d-2Z-g2l" secondAttribute="trailing" id="yR8-yd-Qqh"/>
+                            <constraint firstItem="UpQ-KD-Ens" firstAttribute="top" secondItem="g5d-2Z-g2l" secondAttribute="bottom" constant="8" symbolic="YES" id="zIn-FG-Qfm"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="p0e-pi-GPO" id="MFc-hL-P6g"/>
+                        <outlet property="collectionViewContainer" destination="UpQ-KD-Ens" id="5Ur-sr-DCq"/>
+                        <outlet property="layoutSelectionControl" destination="Okt-PY-Ons" id="Eu4-1F-F7f"/>
+                        <outlet property="shareButton" destination="LSn-Jt-CVL" id="6oD-Xz-zFn"/>
+                        <outlet property="textField" destination="1nt-RI-PuR" id="23S-GX-74g"/>
+                        <outlet property="toolbar" destination="6vY-dc-VoR" id="l6b-FR-eAj"/>
+                        <segue destination="iwK-FN-eOn" kind="modal" identifier="ShowFlickrPhoto" modalPresentationStyle="formSheet" id="cWk-aP-fGk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-202" y="-229"/>
+        </scene>
+        <!--Flickr Photo View Controller-->
+        <scene sceneID="iOf-Zd-YhG">
+            <objects>
+                <viewController id="iwK-FN-eOn" customClass="FlickrPhotoViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uQK-tG-wnE"/>
+                        <viewControllerLayoutGuide type="bottom" id="eud-I2-730"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="L0x-V5-Ln4">
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aul-Zs-yFP">
+                                <rect key="frame" x="0.0" y="44" width="540" height="576"/>
+                            </imageView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hY0-rN-dav">
+                                <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="89w-Iu-eF1"/>
+                                    <constraint firstAttribute="width" constant="540" id="ZAH-ii-5EY"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem title="Done" id="KDN-hs-Nk8">
+                                        <connections>
+                                            <action selector="done:" destination="iwK-FN-eOn" id="VJU-Lv-Juu"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Aul-Zs-yFP" firstAttribute="top" secondItem="hY0-rN-dav" secondAttribute="bottom" id="2eA-Mv-RaJ"/>
+                            <constraint firstItem="hY0-rN-dav" firstAttribute="leading" secondItem="L0x-V5-Ln4" secondAttribute="leading" id="Cb2-gC-Y03"/>
+                            <constraint firstItem="Aul-Zs-yFP" firstAttribute="leading" secondItem="L0x-V5-Ln4" secondAttribute="leading" id="LdL-GC-k8z"/>
+                            <constraint firstItem="Aul-Zs-yFP" firstAttribute="trailing" secondItem="L0x-V5-Ln4" secondAttribute="trailing" id="S8O-DO-SXR"/>
+                            <constraint firstItem="Aul-Zs-yFP" firstAttribute="bottom" secondItem="L0x-V5-Ln4" secondAttribute="bottom" id="V6I-Rb-sps"/>
+                            <constraint firstItem="hY0-rN-dav" firstAttribute="top" secondItem="L0x-V5-Ln4" secondAttribute="top" id="nWv-6A-2NB"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="Aul-Zs-yFP" id="wVn-rZ-mDi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GEN-mj-ybg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="678" y="-229"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="divider_bar.png" width="697" height="13"/>
+        <image name="search_text.png" width="97" height="25"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackOpaque"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

@@ -15,9 +15,13 @@
 #import "FlickrPhotoHeaderView.h"
 #import "FlickrPhotoViewController.h"
 
+#import "PinchLayout.h"
 #import "SimpleFlowLayout.h"
 
 #import <MessageUI/MessageUI.h>
+
+static const CGFloat kMinScale = 1.0f;
+static const CGFloat kMaxScale = 3.0f;
 
 @interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, MFMailComposeViewControllerDelegate>
 
@@ -39,6 +43,10 @@
 @property (nonatomic, strong) UICollectionViewFlowLayout *layout1;
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
+
+@property (nonatomic, strong) UIPinchGestureRecognizer *pinchOutGestureRecognizer;
+@property (nonatomic, strong) UICollectionView *currentPinchCollectionView;
+@property (nonatomic, strong) NSIndexPath *currentPinchedItem;
 
 @end
 
@@ -73,6 +81,75 @@
     
     self.longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(handleLongPressGesture:)];
+
+    self.pinchOutGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self
+                                                                               action:@selector(handlePinchOutGesture)];
+    
+
+}
+
+- (void)handlePinchOutGesture:(UIPinchGestureRecognizer*)recognizer
+{
+    // 1
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        // 2 如果手势开始，获取缩放发生的点。然后通过该点获取发生缩放的cell
+        CGPoint pinchPoint = [recognizer locationInView:self.collectionView];
+        NSIndexPath *pinchedItem = [self.collectionView indexPathForItemAtPoint:pinchPoint];
+        if (pinchedItem) {
+            // 3 如果找到item, 接着将索引路径赋值给之前创建的属性。
+            self.currentPinchedItem = pinchedItem;
+            
+            // 4 按要求创建一个新的缩放布局，初始化缩放大小为0.
+            PinchLayout *layout = [[PinchLayout alloc] init];
+            layout.itemSize = CGSizeMake(200.0f, 200.0f);
+            layout.minimumInteritemSpacing = 20.0f;
+            layout.minimumLineSpacing = 20.0f;
+            layout.sectionInset = UIEdgeInsetsMake(20.0f, 20.0f, 20.0f, 20.0f);
+            layout.headerReferenceSize = CGSizeMake(0.0f, 90.0f);
+            layout.pinchScale = 0.0f;
+            
+            // 5 使用设置到缩放布局的布局创建新的集合视图
+            self.currentPinchCollectionView = [[UICollectionView alloc] initWithFrame:self.collectionView.frame collectionViewLayout:layout];
+            self.currentPinchCollectionView.backgroundColor = [UIColor clearColor];
+            self.currentPinchCollectionView.delegate = self;
+            self.currentPinchCollectionView.dataSource = self;
+            self.currentPinchCollectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [self.currentPinchCollectionView registerNib:[UINib nibWithNibName:@"FlickrPhotoCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"MY_CELL"];
+            [self.currentPinchCollectionView registerNib:[UINib nibWithNibName:@"FlickrPhotoHeaderView" bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"FlickrPhotoHeaderView"];
+            
+            // 6
+            [self.collectionViewContainer addSubview:self.currentPinchCollectionView];
+            
+            // 7
+            UIPinchGestureRecognizer *recognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchInGesture:)];
+            [_currentPinchCollectionView addGestureRecognizer:recognizer];
+        }
+    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
+        if (self.currentPinchedItem) {
+            // 8
+            CGFloat theScale = recognizer.scale;
+            theScale = MIN(theScale, kMaxScale);
+            theScale = MAX(theScale, kMinScale);
+            
+            // 9
+            CGFloat theScalePct = (theScale -kMinScale) / (kMaxScale - kMinScale);
+            
+            // 10
+            PinchLayout *layout = (PinchLayout *)_currentPinchCollectionView.collectionViewLayout;
+            layout.pinchScale = theScalePct;
+            layout.pinchCenter = [recognizer locationInView:self.collectionView];
+            
+            // 11
+            self.collectionView.alpha = 1.0f - theScalePct;
+        }
+    } else {
+        if (self.currentPinchedItem) {
+            // 12
+            PinchLayout *layout = (PinchLayout *)_currentPinchCollectionView.collectionViewLayout;
+            layout.pinchScale = 1.0f;
+            self.collectionView.alpha = 0.0f;
+        }
+    }
 }
 
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer*)recognizer {
@@ -130,11 +207,13 @@
         default: {
             self.collectionView.collectionViewLayout = self.layout1;
             [self.collectionView removeGestureRecognizer:self.longPressGestureRecognizer];
+            [self.collectionView removeGestureRecognizer:self.pinchOutGestureRecognizer];
         }
             break;
         case 1: {
             self.collectionView.collectionViewLayout = self.layout2;
             [self.collectionView addGestureRecognizer:self.longPressGestureRecognizer];
+            [self.collectionView addGestureRecognizer:self.pinchOutGestureRecognizer];
         }
             break;
         case 2: {

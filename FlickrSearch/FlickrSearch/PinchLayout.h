@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PinchLayout : UICollectionViewFlowLayout
-
+@property (nonatomic, assign) CGFloat pinchScale;
+@property (nonatomic, assign) CGPoint pinchCenter;
 @end

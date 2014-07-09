@@ -17,13 +17,15 @@
 
 #import "PinchLayout.h"
 #import "SimpleFlowLayout.h"
+#import "StackedGridLayout.h"
+#import "CoverFlowLayout.h"
 
 #import <MessageUI/MessageUI.h>
 
 static const CGFloat kMinScale = 1.0f;
 static const CGFloat kMaxScale = 3.0f;
 
-@interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, MFMailComposeViewControllerDelegate>
+@interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, MFMailComposeViewControllerDelegate, StackedGridLayoutDelegate>
 
 @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *shareButton;
@@ -41,6 +43,8 @@ static const CGFloat kMaxScale = 3.0f;
 @property (nonatomic, strong) SimpleFlowLayout *layout2;
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *layout1;
+@property (nonatomic, strong) StackedGridLayout *layout3;
+@property (nonatomic, strong) CoverFlowLayout *layout4;
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
@@ -86,6 +90,11 @@ static const CGFloat kMaxScale = 3.0f;
                                                                                action:@selector(handlePinchOutGesture:)];
     
 
+    self.layout3 = [[StackedGridLayout alloc] init];
+    self.layout3.headerHeight = 90.0f;
+    
+    self.layout4 = [[CoverFlowLayout alloc] init];
+    
 }
 
 - (void)handlePinchInGesture:(UIPinchGestureRecognizer*)recognizer
@@ -247,9 +256,15 @@ static const CGFloat kMaxScale = 3.0f;
         }
             break;
         case 2: {
+            self.collectionView.collectionViewLayout = self.layout3;
+            [self.collectionView removeGestureRecognizer:self.pinchOutGestureRecognizer];
+            [self.collectionView removeGestureRecognizer:self.longPressGestureRecognizer];
         }
             break;
         case 3: {
+            self.collectionView.collectionViewLayout = self.layout4;
+            [self.collectionView removeGestureRecognizer:self.pinchOutGestureRecognizer];
+            [self.collectionView removeGestureRecognizer:self.longPressGestureRecognizer];
         }
             break;
     }
@@ -359,7 +374,34 @@ static const CGFloat kMaxScale = 3.0f;
 }
 
 
+#pragma mark - custom layout
+- (NSInteger)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)cvl numberOfColumnsInSection:(NSInteger)section
+{
+    return 3;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)cvl itemInsetsForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
+}
+
+- (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)cvl sizeForItemWithWidth:(CGFloat)width atIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *searchTerm = self.searches[indexPath.section];
+    FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.item];
+    
+    CGSize picSize = photo.thumbnail.size.width > 0.0f ? photo.thumbnail.size : CGSizeMake(100.0f, 100.0f);
+    picSize.height += 35.0f;
+    picSize.width += 35.0f;
+    
+    CGSize retval = CGSizeMake(width, picSize.height * width / picSize.width);
+    return retval;
+}
+
+
 #pragma mark - UICollectionViewDelegate
+
+
 
 - (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	if (self.sharing) {
@@ -419,7 +461,24 @@ static const CGFloat kMaxScale = 3.0f;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout*)cvl insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(50.0f, 20.0f, 50.0f, 20.0f);
+    if (cvl == self.layout4) {
+        NSString *searchTerm = self.searches[section];
+        NSArray *results = self.searchResults[searchTerm];
+        
+        FlickrPhoto *firstPhoto = results[0];
+        CGSize firstItemSize = firstPhoto.thumbnail.size;
+        firstItemSize.height += 35.0f;
+        firstItemSize.width += 35.0f;
+        
+        FlickrPhoto *lastPhoto = results[results.count - 1];
+        CGSize lastItemSize = lastPhoto.thumbnail.size;
+        lastItemSize.height += 35.0f;
+        lastItemSize.width += 35.0f;
+        
+        return UIEdgeInsetsMake(0.0f, (cv.bounds.size.width - firstItemSize.width) / 2.0f, 0.0f, (cv.bounds.size.width - lastItemSize.width) / 2.0f);
+    } else {
+        return UIEdgeInsetsMake(50.0f, 20.0f, 50.0f, 20.0f);
+    }
 }
 
 
